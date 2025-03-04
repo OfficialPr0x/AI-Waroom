@@ -72,19 +72,21 @@ Create the most powerful AI-enhanced development tool by integrating specialized
 ### Frontend
 - TypeScript-based VS Code extension
 - React with Tailwind CSS for UI components
+- TanStack Query for data fetching, caching, and state management
 - Web3.js/ethers.js for blockchain connectivity
 
-### Backend
-- Node.js with NestJS/Express.js
-- PostgreSQL/MongoDB for data storage
-- Redis for caching
-- WebSockets/GraphQL for real-time communication
+### Backend (Serverless)
+- Firebase Authentication for user management
+- Supabase Edge Functions for serverless API endpoints
+- Supabase PostgreSQL for database storage
+- Drizzle ORM for type-safe database interactions
+- Supabase Realtime for WebSocket connections
 
 ### AI Processing
+- OpenRouter API as the unified gateway for accessing multiple AI models
 - Claude 3.7 Sonnet via OpenRouter API
-- LangChain for agent orchestration
-- RabbitMQ/Kafka for message handling
-- Pinecone/Weaviate for vector storage
+- OpenAI GPT-4o and GPT-4 Turbo models via OpenRouter API
+- PydanticAI for agent orchestration and type-safe AI interactions
 
 ### Blockchain Infrastructure
 - Solidity/Rust smart contracts
@@ -167,6 +169,31 @@ Differentiators:
 3. Create agent customization interface
 4. Develop real-time code analysis features
 
+### Database Schema Design
+1. Integrate Drizzle ORM with existing Supabase PostgreSQL database
+   - Leverage Firebase Auth for user authentication
+   - Use Drizzle ORM for type-safe database interactions
+   - Create schema definitions that map to Supabase tables
+   - Users table for profiles (integrated with Firebase Auth)
+   - Agents table for AI agent metadata and configuration
+     - Agent type and specialization
+     - PydanticAI schema references
+     - Customization parameters
+     - Evolution metrics
+   - AgentModules table for customizable agent components
+   - Experience table for tracking agent evolution
+   - Challenges table for coding challenges
+   - Achievements table for user accomplishments
+   - Marketplace table for NFT transactions
+2. Create migration system for schema versioning with Drizzle Kit
+3. Implement repository pattern for data access
+4. Utilize Supabase real-time subscriptions for live updates
+5. Implement Firebase Auth integration for user management
+   - User registration and login flows
+   - Social authentication providers
+   - Role-based access control
+   - JWT token verification
+
 ### Gamification Layer
 1. Build experience and leveling system
 2. Design coding challenges framework
@@ -207,6 +234,10 @@ ai-warroom-extension/
 │   ├── agents/                   # Agent implementation
 │   │   ├── AgentManager.ts       # Agent orchestration
 │   │   ├── BaseAgent.ts          # Base agent class
+│   │   ├── pydantic/             # PydanticAI integration
+│   │   │   ├── schemas.ts        # Pydantic schemas for AI
+│   │   │   ├── functions.ts      # AI function definitions
+│   │   │   └── agents.ts         # Agent definitions
 │   │   └── specialized/          # Specialized agents
 │   │       ├── CodeReviewAgent.ts
 │   │       ├── SecurityAgent.ts
@@ -215,6 +246,35 @@ ai-warroom-extension/
 │   │   ├── contracts/            # Smart contracts
 │   │   ├── NFTManager.ts         # NFT management
 │   │   └── Marketplace.ts        # Marketplace logic
+│   ├── db/                       # Database integration
+│   │   ├── schema/               # Drizzle schema definitions
+│   │   │   ├── agents.ts         # Agent tables
+│   │   │   ├── users.ts          # User tables (mapped to Firebase Auth)
+│   │   │   └── gamification.ts   # Gamification tables
+│   │   ├── migrations/           # Drizzle Kit migrations
+│   │   ├── supabase.ts           # Supabase client configuration
+│   │   ├── drizzle.ts            # Drizzle ORM configuration
+│   │   └── repositories/         # Data access layer
+│   │       ├── agentRepository.ts
+│   │       ├── userRepository.ts
+│   │       └── gamificationRepository.ts
+│   ├── auth/                     # Authentication
+│   │   ├── firebase.ts           # Firebase configuration
+│   │   ├── authProvider.tsx      # Auth context provider
+│   │   ├── useAuth.ts            # Auth hook
+│   │   └── guards/               # Auth guards
+│   │       ├── requireAuth.tsx   # Protected route component
+│   │       └── roleGuard.tsx     # Role-based access control
+│   ├── api/                      # API client for Edge Functions
+│   │   ├── client.ts             # API client configuration
+│   │   ├── agents.ts             # Agent API endpoints
+│   │   ├── users.ts              # User API endpoints
+│   │   └── gamification.ts       # Gamification API endpoints
+│   ├── queries/                  # TanStack Query hooks
+│   │   ├── queryClient.ts        # Query client configuration
+│   │   ├── agents.ts             # Agent query hooks
+│   │   ├── users.ts              # User query hooks
+│   │   └── gamification.ts       # Gamification query hooks
 │   ├── gamification/             # Gamification features
 │   │   ├── ExperienceSystem.ts   # Agent leveling
 │   │   ├── Challenges.ts         # Coding challenges
@@ -223,6 +283,20 @@ ai-warroom-extension/
 │       ├── codeAnalysis.ts       # Code analysis tools
 │       ├── security.ts           # Security utilities
 │       └── storage.ts            # Data persistence
+├── supabase/                     # Supabase configuration
+│   └── functions/                # Edge Functions
+│       ├── agents/               # Agent management functions
+│       │   ├── index.ts          # Main function handler
+│       │   └── types.ts          # Type definitions
+│       ├── users/                # User profile functions
+│       │   ├── index.ts          # Main function handler
+│       │   └── types.ts          # Type definitions
+│       ├── gamification/         # Gamification functions
+│       │   ├── index.ts          # Main function handler
+│       │   └── types.ts          # Type definitions
+│       └── ai/                   # AI processing functions
+│           ├── index.ts          # Main function handler
+│           └── types.ts          # Type definitions
 ├── test/                         # Tests
 ├── package.json                  # Dependencies
 └── README.md                     # Documentation
@@ -272,9 +346,10 @@ ai-warroom-extension/
 - lucide-react (icons)
 
 ### AI Integration
-- langchain
-- openai
-- claude-ai
+- openrouter
+- openai (^4.77.0)
+- claude-ai (^1.0.0)
+- pydantic-ai
 
 ### Blockchain
 - ethers.js
@@ -283,9 +358,11 @@ ai-warroom-extension/
 - arweave
 
 ### Data Storage
-- mongodb
-- redis
-- pinecone
+- drizzle-orm
+- @supabase/supabase-js
+- firebase/auth
+- @tanstack/react-query
+- pydantic-ai
 
 ### Testing
 - jest
